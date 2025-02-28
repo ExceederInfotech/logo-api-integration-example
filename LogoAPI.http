@@ -1,0 +1,6 @@
+@LogoAPI_HostAddress = http://localhost:5126
+
+GET {{LogoAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
