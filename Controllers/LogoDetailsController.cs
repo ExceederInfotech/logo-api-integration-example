@@ -8,6 +8,11 @@ namespace LogoAPI.Controllers
     [Route("[controller]")]
     public class LogoDetailsController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+        public LogoDetailsController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         [HttpGet(Name = "GetLogoPricing")]
         public async Task<ActionResult<CompanyLogoDTO>> Get(string companyName)
         {
@@ -16,7 +21,8 @@ namespace LogoAPI.Controllers
             {
                 var client = new HttpClient();
                 string requestURL = "https://api.logo.dev/search?q=" + companyName;
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "sk_UrDS6e_0TNqw_nE33Ut5vQ");
+                string secretKey = _configuration.GetValue<string>("secretkey");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", secretKey);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestURL);
                 var response = await client.SendAsync(httpRequest);
